@@ -2,6 +2,7 @@ package com.andrea.training;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        Calculadora calc= new Calculadora();
+        System.out.println(calc.addCalc(2,3));
     }
 }
