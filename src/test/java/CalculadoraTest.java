@@ -1,11 +1,14 @@
 import com.andrea.training.Calculadora;
+import org.testng.annotations.Test;
+
 import static org.junit.Assert.*;
-import org.junit.Test;
+
+
 
 public class CalculadoraTest {
     //Calculadora calc= new Calculadora();
     @Test
-    public void probarSuma(){
+     public void probarSuma(){
         Calculadora calc= new Calculadora();
         double resultado= 10.0;
         assertEquals(resultado,calc.addCalc(5,5),0.001);
