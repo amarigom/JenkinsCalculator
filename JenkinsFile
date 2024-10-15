@@ -20,10 +20,38 @@ agent any
                     archive 'target/*.jar'}
 
                 }
-        stage ("EmailBuildStatus"){
-                    steps{
-                    mail bcc: '', body: 'Sample body', cc: '', from: '', replyTo: '', subject: 'Sample Subject', to: 'andreamarigomez@gmail.com'}
-                        }
+        stage('Send Email') {
+                    steps {
+                        script {
+                            def status = currentBuild.currentResult
+                            def subject = "Build ${env.JOB_NAME} #${env.BUILD_NUMBER}: ${status}"
+                            def body = """
+                            <p>Build Name: ${env.JOB_NAME}</p>
+                            <p>Build Number: ${env.BUILD_NUMBER}</p>
+                            <p>Status: ${status}</p>
+                            <p>Build URL: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                            """
 
-    }
+                            // Enviar correo utilizando el plugin Email Extension
+                            emailext(
+                                subject: subject,
+                                body: body,
+                                mimeType: 'text/html', // Si deseas que el cuerpo del correo esté en formato HTML
+                                to: RECIPIENTS,
+                                from: BUILD_USER,
+                                attachLog: true, // Adjuntar log del build
+                                attachmentsPattern: '**/target/*.html' // Adjuntar reportes si los hay
+                            )
+                        }
+                    }
+                }
+            }
+
+            post {
+                failure {
+                    echo 'The build has failed.'
+                }
+                success {
+                    echo 'The build was successful.'
+                }
 }
