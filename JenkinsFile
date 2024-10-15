@@ -17,10 +17,13 @@ agent any
                     steps{
                     input("Do you want to capture results?")
                     junit '**/target/surefire-reports/TEST*.xml'
+                    archive 'target/*.jar'}
 
-                    archive 'target/*.jar'
-                    }
                 }
+        stage ("EmailBuildStatus"){
+                    steps{
+                    mail bcc: '', body: 'Sample body', cc: '', from: '', replyTo: '', subject: 'Sample Subject', to: 'andreamarigomez@gmail.com'}
+                        }
 
     }
 }
